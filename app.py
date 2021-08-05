@@ -6,7 +6,7 @@ from aws_cdk import core
 from helloworld.pipeline_stack import PipelineStack
 
 app = core.App()
-PipelineStack(app, 'SoccerBossPipeline', env={
+PipelineStack(app, 'HelloWorldLambdaContainerPipeline', env={
     'region': 'eu-west-1'
 })
 
