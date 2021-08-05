@@ -1,5 +1,4 @@
-FROM python
-WORKDIR /app
-COPY . .
+FROM gallery.ecr.aws/lambda/python:latest
+COPY app.py ${LAMBDA_TASK_ROOT}
 RUN pip install -r requirements.txt && rm requirements.txt
-CMD ["python3", "./app.py"]
+CMD [ "app.handler" ]
