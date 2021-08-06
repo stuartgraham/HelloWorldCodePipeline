@@ -1,10 +1,5 @@
 build_spec = {
     "version": "0.2",
-    "env": {
-        "exported-variables": {
-            "LATEST_IMAGE_TAG"
-        }
-    },
     "phases": {
         "install": {
             "commands": [
