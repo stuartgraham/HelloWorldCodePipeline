@@ -3,6 +3,7 @@ from aws_cdk import (
     aws_ecr as ecr,
     aws_iam as iam,
     aws_codebuild as codebuild,
+    aws_codepipe as codepipeline,
     pipelines as pipelines
 )
 
@@ -49,6 +50,8 @@ class PipelineStack(cdk.Stack):
             build_image=codebuild.LinuxBuildImage.STANDARD_5_0,
             privileged=True
             )
+        
+        latest_image_tag = codepipeline.Artifact()
 
         container_build = pipelines.CodeBuildStep("ContainerBuild",
             build_environment = build_environment,
