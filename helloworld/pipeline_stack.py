@@ -21,7 +21,6 @@ class PipelineStack(cdk.Stack):
         # Buildspec
         buildspec = codebuild.BuildSpec.from_source_filename("buildspec.yaml")
 
-
         # Github Source
         git_hub = pipelines.CodePipelineSource.git_hub(
                     "stuartgraham/HelloWorldCDKPipeline",
