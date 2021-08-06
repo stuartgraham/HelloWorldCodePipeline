@@ -41,13 +41,15 @@ class PipelineStack(cdk.Stack):
         )
 
         ## Container build
+        build_role = iam.Role(self, "CodeBuildRole", managed_policies=[
+            iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser")
+        ])
+        
         container_build = pipelines.CodeBuildStep("ContainerBuild",
             input = git_hub,
             partial_build_spec=buildspec,
             commands=[],
-            role=iam.IRole.add_managed_policy(self,
-                policy=iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser")
-            ),
+            role=build_role,
             env={
                 "AWS_ACCOUNT_ID": self.account,
                 "REPO_NAME":  f"{self.account}.dkr.ecr.{self.region}.amazonaws.com/{ecr_repo.repository_name}"
