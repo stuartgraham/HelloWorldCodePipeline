@@ -43,16 +43,18 @@ class PipelineStack(cdk.Stack):
         build_role = iam.Role(self, "CodeBuildRole", 
             assumed_by=iam.ServicePrincipal("codebuild.amazonaws.com"),
             managed_policies=[
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser"),
-                iam.ManagedPolicy.from_aws_managed_policy_name("SSMParameterReadPolicy")
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser")
             ]
         )
+        build_role.add_to_policy(iam.PolicyStatement(
+                resources=["*"],
+                actions=["ssm:PutParameters"]
+        ))
+
         build_environment = codebuild.BuildEnvironment(
             build_image=codebuild.LinuxBuildImage.STANDARD_5_0,
             privileged=True
             )
-        
-        latest_image_tag = codepipeline.Artifact()
 
         container_build = pipelines.CodeBuildStep("ContainerBuild",
             build_environment = build_environment,
