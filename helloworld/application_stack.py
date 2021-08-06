@@ -7,10 +7,7 @@ class HelloWorldStage(cdk.Stage):
     def __init__(self, scope: cdk.Construct, id: str, ecr_repo=None, **kwargs):
         super().__init__(scope, id, **kwargs)
         self.ecr_repo = ecr_repo
-
-        service = HelloWorldStack(self, "HelloWorld", ecr_repo=self.ecr_repo)
-
-        self.url_output = service.url_output
+        HelloWorldStack(self, "HelloWorld", ecr_repo=self.ecr_repo)
 
 
 class HelloWorldStack(cdk.Stack):
