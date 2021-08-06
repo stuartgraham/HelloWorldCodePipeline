@@ -38,7 +38,7 @@ class PipelineStack(cdk.Stack):
                 ]
             )
         )
-        pipelines.CodeBuildStep("Synth",
+        pipelines.CodeBuildStep("ContainerBuild",
             input = git_hub,
             partial_build_spec=buildspec,
             commands=[],
