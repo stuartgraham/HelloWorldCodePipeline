@@ -3,7 +3,8 @@ from aws_cdk import (
     aws_iam as iam,
     aws_lambda as _lambda,
     aws_apigatewayv2 as api_gw,
-    aws_apigatewayv2_integrations as api_gw_int
+    aws_apigatewayv2_integrations as api_gw_int,
+    aws_ssm as ssm
 )
 
 
@@ -20,16 +21,16 @@ class HelloWorldStack(cdk.Stack):
         self.ecr_repo = ecr_repo
         
         # Lambda
+        latest_image = ssm.StringParameter.from_string_parameter_attributes(self, "LatestImage",
+            parameter_name="/HelloWorldLambdaContainer/LatestImage").string_value
+
+
         hello_world_lambda = _lambda.DockerImageFunction(self, "HelloWorld-AppHandler",
-            code=_lambda.DockerImageCode.from_ecr(repository=ecr_repo, tag="latest")
+            code=_lambda.DockerImageCode.from_ecr(repository=ecr_repo, tag=latest_image)
         )
         hello_world_lambda.role.add_managed_policy(
             iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser"))
 
-        hello_world_lambda.role.add_to_policy(iam.PolicyStatement(
-                resources=["*"],
-                actions=["ssm:GetParameters"]
-        ))
 
         # APIGW
         apigw_helloworld = api_gw.HttpApi(self, 'HelloWorld-APIGW-Http')
