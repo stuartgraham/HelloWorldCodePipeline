@@ -5,9 +5,7 @@ build_spec = {
             "commands": [
                 "echo Install phase started",
                 "cd container",
-                "ls",
-                "echo $AWS_DEFAULT_REGION",
-                "echo $AWS_ACCOUNT_ID",
+                "echo $REPO_NAME"
             ]
         },
         "pre_build": {
@@ -18,7 +16,7 @@ build_spec = {
         },
         "build": {
             "commands": [
-                "echo Starting build number ':' $CODEBUILD_BUILD_NUMBER",
+                "echo Starting build number $CODEBUILD_BUILD_NUMBER",
                 "echo Building image",
                 "BUILD_PREFIX=v1.0.",
                 "TAG_NAME=$BUILD_PREFIX$CODEBUILD_BUILD_NUMBER",

@@ -19,9 +19,6 @@ class PipelineStack(cdk.Stack):
         )
         ecr_repo.add_lifecycle_rule(max_image_count=10)
 
-
-
-
         # Github Source
         git_hub = pipelines.CodePipelineSource.git_hub(
                     "stuartgraham/HelloWorldCDKPipeline",
