@@ -48,7 +48,7 @@ class PipelineStack(cdk.Stack):
         )
         build_role.add_to_policy(iam.PolicyStatement(
                 resources=["*"],
-                actions=["ssm:PutParameters"]
+                actions=["ssm:PutParameter"]
         ))
 
         build_environment = codebuild.BuildEnvironment(
