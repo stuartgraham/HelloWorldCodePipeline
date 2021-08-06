@@ -3,7 +3,7 @@ from aws_cdk import (
     aws_ecr as ecr,
     aws_iam as iam,
     aws_codebuild as codebuild,
-    aws_codepipe as codepipeline,
+    aws_codepipeline as codepipeline,
     pipelines as pipelines
 )
 
