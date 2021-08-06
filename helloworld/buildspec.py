@@ -17,7 +17,7 @@ build_spec = {
             "commands": [
                 "echo Starting build number ':' $CODEBUILD_BUILD_NUMBER",
                 "echo Building image",
-                "BUILD_PREFIX="v1.0."",
+                "BUILD_PREFIX=v1.0.",
                 "TAG_NAME=$BUILD_PREFIX$CODEBUILD_BUILD_NUMBER",
                 "echo $TAG_NAME",
                 "docker build --no-cache -t $REPO_NAME:$TAG_NAME .",
