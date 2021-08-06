@@ -49,8 +49,7 @@ class PipelineStack(cdk.Stack):
             }
         )
 
-        pipeline.add_stage(cdk.Stage(self, "CodeBuildStage", pre=[codebuild_stage]))
-
+        pipeline.add_stage(post=[codebuild_stage])
 
         hello_world_app = HelloWorldStage(self, "HelloWorldApp", ecr_repo=ecr_repo)
         
