@@ -45,7 +45,7 @@ class PipelineStack(cdk.Stack):
             input = git_hub,
             partial_build_spec=buildspec,
             commands=[],
-            role=iam.IRole.add_managed_policy(
+            role=iam.IRole.add_managed_policy(self,
                 policy=iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser")
             ),
             env={
