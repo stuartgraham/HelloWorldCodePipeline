@@ -38,7 +38,7 @@ class PipelineStack(cdk.Stack):
                 ]
             )
         )
-        pipelines.CodeBuildStep("ContainerBuild",
+        codebuild_stage = pipelines.CodeBuildStep("ContainerBuild",
             input = git_hub,
             partial_build_spec=buildspec,
             commands=[],
@@ -48,6 +48,9 @@ class PipelineStack(cdk.Stack):
                 "REPO_NAME":  f"{self.account}.dkr.ecr.{self.region}.amazonaws.com/{ecr_repo.repository_name}"
             }
         )
+
+        pipeline.add_stage(cdk.Stage(self, "CodeBuildStage", pre=[codebuild_stage]))
+
 
         hello_world_app = HelloWorldStage(self, "HelloWorldApp", ecr_repo=ecr_repo)
         
