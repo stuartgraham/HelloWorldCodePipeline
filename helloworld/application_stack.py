@@ -21,7 +21,7 @@ class HelloWorldStack(cdk.Stack):
         
         # Lambda
         hello_world_lambda = _lambda.DockerImageFunction(self, "HelloWorld-AppHandler",
-            code=_lambda.DockerImageCode.from_ecr(ecr_repo)
+            code=_lambda.DockerImageCode.from_ecr(repository=ecr_repo, tag="latest")
         )
         hello_world_lambda.role.add_managed_policy(
             iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser"))
