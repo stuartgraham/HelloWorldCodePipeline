@@ -5,6 +5,10 @@ build_spec = {
             "commands": [
                 "echo Install phase started",
                 "cd container"
+                "ls"
+                "echo $AWS_DEFAULT_REGION"
+                "echo $AWS_ACCOUNT_ID"
+
             ]
         },
         "pre_build": {
