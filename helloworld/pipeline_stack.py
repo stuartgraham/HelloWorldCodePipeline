@@ -1,10 +1,8 @@
-from os import path
-import yaml
-
 from aws_cdk import (
     core as cdk,
     aws_ecr as ecr,
     aws_iam as iam,
+    aws_codebuild as codebuild,
     pipelines as pipelines
 )
 
@@ -21,9 +19,8 @@ class PipelineStack(cdk.Stack):
         ecr_repo.add_lifecycle_rule(max_image_count=10)
 
         # Buildspec
-        this_dir = path.dirname(__file__)
-        with open(path.join(this_dir, "buildspec.yaml")) as f:
-            buildspec = yaml.load(f, Loader=yaml.FullLoader)
+        buildspec = codebuild.BuildSpec.from_source_filename("buildspec.yaml")
+
 
         # Github Source
         git_hub = pipelines.CodePipelineSource.git_hub(
@@ -41,18 +38,17 @@ class PipelineStack(cdk.Stack):
                 ]
             )
         )
-
         pipelines.CodeBuildStep("Synth",
             input = git_hub,
             partial_build_spec=buildspec,
             commands=[],
             role=iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser"),
             env={
-                "AWS_ACCOUNT_ID": {"value": self.account},
-                "REPO_NAME": {"value": f"{self.account}.dkr.ecr.{self.region}.amazonaws.com/{ecr_repo.repository_name}"}
+                "AWS_ACCOUNT_ID": self.account,
+                "REPO_NAME":  f"{self.account}.dkr.ecr.{self.region}.amazonaws.com/{ecr_repo.repository_name}"
             }
         )
 
-        hello_world_app = HelloWorldStage(self, 'HelloWorldApp', ecr_repo=ecr_repo)
+        hello_world_app = HelloWorldStage(self, "HelloWorldApp", ecr_repo=ecr_repo)
         
         pipeline.add_application_stage(hello_world_app)
