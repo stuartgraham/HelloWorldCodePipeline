@@ -7,6 +7,7 @@ from aws_cdk import (
 )
 
 from helloworld.application_stack import HelloWorldStage
+from helloworld.buildspec import build_spec
 
 class PipelineStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, construct_id: str, **kwargs) -> None:
@@ -19,7 +20,7 @@ class PipelineStack(cdk.Stack):
         ecr_repo.add_lifecycle_rule(max_image_count=10)
 
         # Buildspec
-        buildspec = codebuild.BuildSpec.from_source_filename("buildspec.yaml")
+        buildspec = codebuild.BuildSpec.from_object(build_spec)
 
         # Github Source
         git_hub = pipelines.CodePipelineSource.git_hub(
