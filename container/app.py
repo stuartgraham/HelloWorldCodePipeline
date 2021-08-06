@@ -1,9 +1,3 @@
-from flask import Flask
-
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return 'Hello World! v1.0'
-
-app.run(host='0.0.0.0', port=5000)
+import sys
+def handler(event, context):
+    return 'Hello World! ' + sys.version
