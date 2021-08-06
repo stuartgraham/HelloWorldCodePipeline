@@ -6,8 +6,5 @@ from aws_cdk import core
 from helloworld.pipeline_stack import PipelineStack
 
 app = core.App()
-PipelineStack(app, 'HelloWorldLambdaContainerPipeline', env={
-    'region': 'eu-west-1'
-})
-
+PipelineStack(app, "HelloWorldLambdaContainerPipeline")
 app.synth()

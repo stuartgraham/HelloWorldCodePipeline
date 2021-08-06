@@ -6,7 +6,7 @@ with open("README.md") as fp:
 
 
 setuptools.setup(
-    name="lambdacontainer",
+    name="helloworld",
     version="0.0.1",
 
     description="An empty CDK Python app",
@@ -15,8 +15,8 @@ setuptools.setup(
 
     author="author",
 
-    package_dir={"": "lambdacontainer"},
-    packages=setuptools.find_packages(where="lambdacontainer"),
+    package_dir={"": "helloworld"},
+    packages=setuptools.find_packages(where="helloworld"),
 
     install_requires=[
         "aws-cdk.core==1.93.0",

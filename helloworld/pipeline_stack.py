@@ -4,12 +4,8 @@ import yaml
 from aws_cdk import (
     core as cdk,
     aws_ecr as ecr,
-    aws_codebuild as codebuild,
-    aws_codedeploy as codedeploy,
-    aws_codepipeline as codepipeline,
-    pipelines as pipelines,
-    aws_codepipeline_actions as codepipeline_actions,
-    aws_iam as iam
+    aws_iam as iam,
+    pipelines as pipelines
 )
 
 from helloworld.application_stack import HelloWorldStage
@@ -29,22 +25,27 @@ class PipelineStack(cdk.Stack):
         with open(path.join(this_dir, "buildspec.yaml")) as f:
             buildspec = yaml.load(f, Loader=yaml.FullLoader)
 
-        # Pipeline
-        pipeline = pipelines.CodePipeline(self, "Pipeline",
-            synth = pipelines.ShellStep("Synth",
-                input = pipelines.CodePipelineSource.git_hub(
+        # Github Source
+        git_hub = pipelines.CodePipelineSource.git_hub(
                     "stuartgraham/HelloWorldCDKPipeline",
                     "lambdacontainer",
                     authentication=cdk.SecretValue.secrets_manager("github-token")
-                ),
+                )
+
+        # Pipeline
+        pipeline = pipelines.CodePipeline(self, "Pipeline",
+            synth = pipelines.ShellStep("Synth",
+                input = git_hub,
                 commands=[
                     "pip install -r requirements.txt", "npm install -g aws-cdk", "cdk synth"
                 ]
             )
         )
 
-        pipeline.CodeBuildStep("Synth",
+        pipelines.CodeBuildStep("Synth",
+            input = git_hub,
             partial_build_spec=buildspec,
+            commands=[],
             role=iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser"),
             env={
                 "AWS_ACCOUNT_ID": {"value": self.account},
@@ -52,8 +53,6 @@ class PipelineStack(cdk.Stack):
             }
         )
 
-        hello_world_app = HelloWorldStage(self, 'HelloWorldApp', ecr_repo=ecr_repo, env={
-            'region': 'eu-west-1'
-        })
+        hello_world_app = HelloWorldStage(self, 'HelloWorldApp', ecr_repo=ecr_repo)
         
         pipeline.add_application_stage(hello_world_app)
