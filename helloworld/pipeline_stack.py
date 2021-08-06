@@ -42,7 +42,7 @@ class PipelineStack(cdk.Stack):
 
         ## Container build
         build_role = iam.Role(self, "CodeBuildRole", 
-        assumed_by="codebuild.amazonaws.com",
+        assumed_by=iam.ServicePrincipal("codebuild.amazonaws.com"),
         managed_policies=[
             iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser")
         ])
