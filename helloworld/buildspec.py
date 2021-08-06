@@ -7,7 +7,7 @@ build_spec = {
                 "cd container",
                 "ls",
                 "echo $AWS_DEFAULT_REGION",
-                "echo $AWS_ACCOUNT_ID",=
+                "echo $AWS_ACCOUNT_ID",
             ]
         },
         "pre_build": {
