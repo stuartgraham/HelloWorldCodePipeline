@@ -30,6 +30,7 @@ class PipelineStack(cdk.Stack):
                 )
 
         # Pipeline
+        ## Synth
         pipeline = pipelines.CodePipeline(self, "Pipeline",
             synth = pipelines.ShellStep("Synth",
                 input = git_hub,
@@ -38,7 +39,9 @@ class PipelineStack(cdk.Stack):
                 ]
             )
         )
-        codebuild_stage = pipelines.CodeBuildStep("ContainerBuild",
+
+        ## Container build
+        container_build = pipelines.CodeBuildStep("ContainerBuild",
             input = git_hub,
             partial_build_spec=buildspec,
             commands=[],
@@ -49,8 +52,6 @@ class PipelineStack(cdk.Stack):
             }
         )
 
-        pipeline.add_stage(post=[codebuild_stage])
-
+        # App deploy
         hello_world_app = HelloWorldStage(self, "HelloWorldApp", ecr_repo=ecr_repo)
-        
-        pipeline.add_stage(hello_world_app)
+        pipeline.add_stage(hello_world_app, pre=[container_build])
