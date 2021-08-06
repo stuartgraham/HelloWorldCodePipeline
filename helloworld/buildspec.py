@@ -18,10 +18,11 @@ build_spec = {
             "commands": [
                 "echo Starting build number $CODEBUILD_BUILD_NUMBER",
                 "echo Building image",
-                "BUILD_PREFIX=v1.0.",
+                "BUILD_PREFIX=1.0.",
                 "TAG_NAME=$BUILD_PREFIX$CODEBUILD_BUILD_NUMBER",
                 "LATEST_IMAGE_TAG=$TAG_NAME",
                 "echo $LATEST_IMAGE",
+                "aws ssm put-paramater --name "HelloWorldLatestImage" --type "String" --value $LATEST_IMAGE --overwrite",
                 "echo $TAG_NAME",
                 "docker build --no-cache -t $REPO_NAME:$TAG_NAME .",
                 "docker tag $REPO_NAME:$TAG_NAME $REPO_NAME:latest"
