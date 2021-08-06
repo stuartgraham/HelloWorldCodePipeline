@@ -46,7 +46,7 @@ class PipelineStack(cdk.Stack):
             partial_build_spec=buildspec,
             commands=[],
             role=iam.IRole.add_managed_policy(
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser")
+                policy=iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser")
             ),
             env={
                 "AWS_ACCOUNT_ID": self.account,
