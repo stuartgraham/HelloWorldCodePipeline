@@ -29,7 +29,7 @@ class HelloWorldStack(cdk.Stack):
             code=_lambda.DockerImageCode.from_ecr(repository=ecr_repo, tag=latest_image)
         )
         hello_world_lambda.role.add_managed_policy(
-            iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser"))
+            iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryReadOnly"))
 
 
         # APIGW
