@@ -7,7 +7,7 @@ from aws_cdk import (
 )
 
 from helloworld.application_stack import HelloWorldStage
-from helloworld.buildspec import build_spec
+from helloworld.buildspec import build_spec as linked_build_spec
 
 class PipelineStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, construct_id: str, **kwargs) -> None:
@@ -19,8 +19,8 @@ class PipelineStack(cdk.Stack):
         )
         ecr_repo.add_lifecycle_rule(max_image_count=10)
 
-        # Buildspec
-        buildspec = codebuild.BuildSpec.from_object(build_spec)
+
+
 
         # Github Source
         git_hub = pipelines.CodePipelineSource.git_hub(
@@ -41,15 +41,22 @@ class PipelineStack(cdk.Stack):
         )
 
         ## Container build
+        build_spec = codebuild.BuildSpec.from_object(linked_build_spec)
         build_role = iam.Role(self, "CodeBuildRole", 
-        assumed_by=iam.ServicePrincipal("codebuild.amazonaws.com"),
-        managed_policies=[
-            iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser")
-        ])
-        
+            assumed_by=iam.ServicePrincipal("codebuild.amazonaws.com"),
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser")
+            ]
+        )
+        build_environment = codebuild.BuildEnvironment(
+            build_image=codebuild.LinuxBuildImage.STANDARD_5_0,
+            privileged=True
+            )
+
         container_build = pipelines.CodeBuildStep("ContainerBuild",
+            build_environment = build_environment,
             input = git_hub,
-            partial_build_spec=buildspec,
+            partial_build_spec=build_spec,
             commands=[],
             role=build_role,
             env={
