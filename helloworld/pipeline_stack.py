@@ -51,4 +51,4 @@ class PipelineStack(cdk.Stack):
 
         hello_world_app = HelloWorldStage(self, "HelloWorldApp", ecr_repo=ecr_repo)
         
-        pipeline.add_application_stage(hello_world_app)
+        pipeline.add_stage(hello_world_app)
