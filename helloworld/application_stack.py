@@ -29,7 +29,7 @@ class HelloWorldStack(cdk.Stack):
         # APIGW
         apigw_helloworld = api_gw.HttpApi(self, 'HelloWorld-APIGW-Http')
         ## Lambda Integrations
-        hello_world_lambda_int = api_gw.LambdaProxyIntegration(
+        hello_world_lambda_int = api_gw_int.LambdaProxyIntegration(
             handler=hello_world_lambda)
         ## Routes
         apigw_helloworld.add_routes(
