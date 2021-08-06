@@ -45,7 +45,9 @@ class PipelineStack(cdk.Stack):
             input = git_hub,
             partial_build_spec=buildspec,
             commands=[],
-            role=iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser"),
+            role=iam.IRole.add_managed_policy(
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryPowerUser")
+            ),
             env={
                 "AWS_ACCOUNT_ID": self.account,
                 "REPO_NAME":  f"{self.account}.dkr.ecr.{self.region}.amazonaws.com/{ecr_repo.repository_name}"
