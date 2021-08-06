@@ -22,7 +22,7 @@ build_spec = {
                 "TAG_NAME=$BUILD_PREFIX$CODEBUILD_BUILD_NUMBER",
                 "LATEST_IMAGE_TAG=$TAG_NAME",
                 "echo $LATEST_IMAGE",
-                "aws ssm put-paramater --name \"/HelloWorldLambdaContainer/LatestImage\" --type \"String\" --value $LATEST_IMAGE --overwrite",
+                "aws ssm put-parameter --name \"/HelloWorldLambdaContainer/LatestImage\" --type \"String\" --value $LATEST_IMAGE --overwrite",
                 "echo $TAG_NAME",
                 "docker build --no-cache -t $REPO_NAME:$TAG_NAME .",
                 "docker tag $REPO_NAME:$TAG_NAME $REPO_NAME:latest"
